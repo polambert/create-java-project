@@ -7,9 +7,7 @@ cjp depends on:
 - bash
 - make
 
-Java Project Creator
-Written in bash
-Used for working on Java projects with exclusively the command line.
+cjp is a terminal Java IDE, written in bash and makefile.
 
 - [Introduction](#introduction)
 	- [Installation](#installation)
