@@ -1,0 +1,74 @@
+#!/bin/bash
+
+# This is a bash script to create java projects.
+# After running the script, and choosing the name of your
+#  project, change into the directory and you'll be able
+#  to run these commands:
+# make - Compile, delete, and run.
+# make keep - Compile and run.
+# make compile - Compile.
+# make unpack - Unpack compiled jar file.
+# make clean - Delete unnecessary folders and files.
+
+echo "Enter the name of your project, lowercase: "
+read NAME
+
+echo "You chose: ${NAME}"
+echo "Creating."
+
+mkdir ${NAME}
+mkdir ${NAME}/bin
+mkdir ${NAME}/bin/jar
+mkdir ${NAME}/source
+
+mkdir ${NAME}/${NAME}
+
+cd ${NAME}
+
+# Create the Makefile
+echo "" > Makefile
+echo "FILES := \$(shell find source/ -name '*.java')" >> Makefile
+echo "" >> Makefile
+
+echo "build:" >> Makefile
+echo -e "\t@javac \$(FILES) -d ." >> Makefile
+echo -e "\t@jar cmf MANIFEST bin/${NAME}.jar ${NAME}/*" >> Makefile
+echo -e "\t@rm -rf testing/" >> Makefile
+echo -e "\t@java -jar bin/${NAME}.jar" >> Makefile
+echo "" >> Makefile
+
+echo "keep:" >> Makefile
+echo -e "\t@javac source/*.java -d ." >> Makefile
+echo -e "\t@jar cmf MANIFEST bin/${NAME}.jar ${NAME}/*" >> Makefile
+echo -e "\t@java -jar bin/${NAME}.jar" >> Makefile
+
+echo "" >> Makefile
+echo "compile:" >> Makefile
+echo -e "\t@javac source/*.java -d ." >> Makefile
+echo -e "\t@jar cmf MANIFEST bin/${NAME}.jar ${NAME}/*" >> Makefile
+echo "" >> Makefile
+
+echo "unpack:" >> Makefile
+echo -e "\t@rm -rf jar-extract" >> Makefile
+echo -e "\t@mkdir jar-extract" >> Makefile
+echo -e "\t@unzip bin/jar/${NAME}.jar -d jar-extract" >> Makefile
+echo "" >> Makefile
+
+echo "clear:" >> Makefile
+echo -e "\t@rm -rf META-INF jar-extract" >> Makefile
+
+# Create the MANIFEST
+echo "Main-Class: ${NAME}.Main" > MANIFEST
+
+# Create the Main entry point
+cd source
+
+echo "" > Main.java
+echo "package ${NAME};" >> Main.java
+echo "" >> Main.java
+echo "class Main {" >> Main.java
+echo -e "\tpublic static void main(String[] args) {" >> Main.java
+echo -e "\t\tSystem.out.println(\"Hello, world!\");" >> Main.java
+echo -e "\t}" >> Main.java
+echo "}" >> Main.java
+
